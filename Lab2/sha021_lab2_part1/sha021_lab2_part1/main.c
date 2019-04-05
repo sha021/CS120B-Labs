@@ -9,12 +9,28 @@
 
 int main(void)
 {
+	
 	DDRA = 0x00; PORTA = 0xFF; // Configure port A's 8 pins as inputs
 	DDRB = 0xFF; PORTB = 0x00; // Configure port B's 8 pins as outputs, initialize to 0s
-	unsigned char tmpB = 0x00; // Temporary variable to hold the value of B
-	unsigned char tmpA = 0x00; // Temporary variable to hold the value of A
+	unsigned char tmpPA0 = 0x00; // Temporary variable to hold the value of A0 Door
+	unsigned char tmpPA1 = 0x00; // Temporary variable to hold the value of A1 Light
+	unsigned char tmpPB0 = 0x00;
 	while(1)
 	{
+		tmpPA0 = PINA & 0x01; // Door 
+		tmpPA1 = PINA & 0x10; // Light
+		
+		//Light should be on when Door is on while Light is off:  0x01
+		tmpPB0 = (tmpPA1 == 0 && tmpPA0 == 1) ? 1 : 0; 
+
+		PORTB = tmpPB0;
+	}
+	return 0;	
+}
+
+
+
+/*
 		// 1) Read input
 		tmpA = PINA & 0x01;
 		// 2) Perform computation
@@ -31,11 +47,5 @@ int main(void)
 		PORTB = tmpB;
 	}
 	return 0;
-}
-
-
-
-
-
-
-
+	
+*/
