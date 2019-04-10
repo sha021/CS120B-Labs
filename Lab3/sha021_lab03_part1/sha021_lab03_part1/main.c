@@ -22,25 +22,22 @@ int main(void)
     DDRC = 0xFF;    PORTC = 0x00;
     
     unsigned char i;
-    unsigned char tempC = 0x00;
+    unsigned char tempC;
     
     /* Replace with your application code */
     while (1) 
     {
+        tempC = 0;
         for (i = 0; i < 8; ++i){
-            if (GetBit(PINA, i)>>i) {
-                tempC += 0x01;
+            if (GetBit(PINA, i)) {
+                ++tempC;
             }
-        }
-        
-        for (i = 0; i < 8; ++i){
-            if (GetBit(PINB, i)>>i) {
-                tempC += 0x01;
+            
+            if (GetBit(PINB, i)) {
+                ++tempC;
             }
-        }
-        
+        }    
         PORTC = tempC;
-        
     }
 }
 
