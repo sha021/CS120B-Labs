@@ -21,24 +21,15 @@ int main(void)
     DDRB = 0xFF;    PORTB = 0x00;
     DDRC = 0xFF;    PORTC = 0x00;
     
-    unsigned char tmpB, tmpC;
+    unsigned char  upperA, lowerA;
     /* Replace with your application code */
     while (1) 
     {
-        tmpB = 0;
-        tmpC = 0;
-        
-        if (GetBit(PINA, 7)) tmpB = SetBit(tmpB, 3, 1);
-        if (GetBit(PINA, 6)) tmpB = SetBit(tmpB, 2, 1);
-        if (GetBit(PINA, 5)) tmpB = SetBit(tmpB, 1, 1);
-        if (GetBit(PINA, 4)) tmpB = SetBit(tmpB, 0, 1);
-        if (GetBit(PINA, 3)) tmpC = SetBit(tmpC, 7, 1);
-        if (GetBit(PINA, 2)) tmpC = SetBit(tmpC, 6, 1);
-        if (GetBit(PINA, 1)) tmpC = SetBit(tmpC, 5, 1);
-        if (GetBit(PINA, 0)) tmpC = SetBit(tmpC, 4, 1);
-        
-        PORTB = tmpB;
-        PORTC = tmpC;
+        upperA = PINA & 0xF0;
+        lowerA = PINA & 0x0F;
+       
+        PORTB = upperA >> 4;
+        PORTC = lowerA << 4;
     }
 
 }
