@@ -1,4 +1,9 @@
-/*
+/* Nathan Brennan & nbren004@ucr.edu
+ * Seung Eun Ha & sha021@ucr.edu
+ * Lab Section: 027
+ * Assignment: Lab 3 Exercise 1
+ * Description: Count '1' bits on portA and port B, store on C
+ * 
  * Lab_3_pt_1.c
  *
  * Created: 4/9/2019 5:58:42 PM
@@ -37,4 +42,3 @@ int main(void)
         PORTC = numOnes;
     }
 }
-

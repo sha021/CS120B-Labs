@@ -1,4 +1,9 @@
-/*
+/* Nathan Brennan & nbren004@ucr.edu
+ * Seung Eun Ha & sha021@ucr.edu
+ * Lab Section: 027
+ * Assignment: Lab 3 Exercise 1
+ * Description: Save & shift values
+ * 
  * nbren004_lab3_pt4.c
  *
  * Created: 4/9/2019 9:57:51 PM

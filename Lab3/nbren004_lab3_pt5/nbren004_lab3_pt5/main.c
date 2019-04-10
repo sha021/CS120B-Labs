@@ -1,4 +1,10 @@
-/*
+/* Nathan Brennan & nbren004@ucr.edu
+ * Seung Eun Ha & sha021@ucr.edu
+ * Lab Section: 027
+ * Assignment: Lab 3 Exercise 1
+ * Description: Take pressure/weight sensor input to determine 
+ *              the status of seatbelt indicator
+ * 
  * nbren004_lab3_pt5.c
  *
  * Created: 4/9/2019 10:23:47 PM

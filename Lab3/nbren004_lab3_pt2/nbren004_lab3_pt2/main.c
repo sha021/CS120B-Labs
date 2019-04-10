@@ -1,4 +1,8 @@
-/*
+/* Nathan Brennan & nbren004@ucr.edu
+ * Seung Eun Ha & sha021@ucr.edu
+ * Lab Section: 027
+ * Assignment: Lab 3 Exercise 1
+ * Description: Simulate gas meter for car
  * nbren004_lab3_pt2.c
  *
  * Created: 4/9/2019 6:31:25 PM
