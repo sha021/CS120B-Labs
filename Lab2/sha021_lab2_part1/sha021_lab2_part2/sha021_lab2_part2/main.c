@@ -1,9 +1,12 @@
-/*
- * sha021_lab2_part2.c
- *
- * Created: 4/4/2019 10:31:43 PM
- * Author : SIENA
- */ 
+
+/* Partner(s) Name & E-mail: Nathan Brennan nbren004@ucr.edu
+* Lab Section: 027
+* Assignment: Lab 2 Exercise 2
+* Exercise Description: [optional - include for your own benefit]
+*
+* I acknowledge all content contained herein, excluding template or example
+* code, is my own original work.
+*/
 
 #include <avr/io.h>
 

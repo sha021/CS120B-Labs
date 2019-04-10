@@ -1,9 +1,12 @@
-/*
- * sha021_lab2_part4.c
- *
- * Created: 4/5/2019 3:00:16 AM
- * Author : SIENA
- */ 
+
+/* Partner(s) Name & E-mail: Nathan Brennan nbren004@ucr.edu
+* Lab Section: 027
+* Assignment: Lab 2 Exercise 4
+* Exercise Description: [optional - include for your own benefit]
+*
+* I acknowledge all content contained herein, excluding template or example
+* code, is my own original work.
+*/
 
 #include <avr/io.h>
 
@@ -32,6 +35,7 @@ int main(void)
         tmpC = PINC & 0xFF;
         
         tmpD0 = tmpD0 & 0x00;       // over MAX_WEIGHT alert 
+        
         tmpD1 = tmpD1 & 0x00;       // over MAX_DIFFERENCE alert
         
         averageWeight = (tmpA + tmpB + tmpC) / 3;
