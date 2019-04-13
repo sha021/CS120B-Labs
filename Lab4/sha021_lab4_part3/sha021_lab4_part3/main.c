@@ -1,7 +1,10 @@
-/*
- * sha021_lab4_part3.c
+/* Nathan Brennan - nbren004@ucr.edu
+ * Seung Eun Ha - sha021@ucr.edu
+ * Lab Section: 27
+ * Assignment: Lab 4 Part 3
+ * Description: Adding a lock from the outside feature to the previous "Combinational Lock" program
  *
- * Created: 4/12/2019 8:51:50 PM
+ * Created: 4/12/2019 9:55:00 PM
  * Author : SIENA
  */ 
 
