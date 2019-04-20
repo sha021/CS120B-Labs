@@ -14,59 +14,78 @@ enum Sequence_States { Start, Init, One, Two, Three, Four, Five, Six, Release} S
 
 void lightSequence() {
     
-    unsigned char next, display, nextState;
+    unsigned char next, display;
     next = ~PINA & 0x01;
     
     switch(Sequence_State) {
         
         case Start:
             Sequence_State = Init;
-            nextState = Init;
             break;
         
         case Init:
-            Sequence_State = One;
-            display = 0;
+            Sequence_State = Release;
+            display = 0x00;
             break;
         
         case One:
-            Sequence_State = next? Release : One;
+            Sequence_State = next? One : Release;
             display = 0x00;
-            nextState = Two;
             break;
         
         case Two:
-            Sequence_State = next? Release : Two; 
+            Sequence_State = next? Two : Release;
             display = 0x0C;
-            nextState = Three;
             break;
         
         case Three:
-            Sequence_State = next? Release : Three;
+            Sequence_State = next? Three : Release;
             display = 0x1E;
-            nextState = Four;
             break;
         
         case Four:
-            Sequence_State = next? Release : Four;
+            Sequence_State = next? Four : Release;
             display = 0x3F;
-            nextState = Five;
             break;
 
         case Five:
-            Sequence_State = next? Release : Five;
+            Sequence_State = next? Five : Release;
             display = 0x33;
-            nextState = Six;
-           break;
+            break;
 
         case Six:
-            Sequence_State = next? Release : Six;
+            Sequence_State = next? Six : Release;
             display = 0x21;
-            nextState = One;
             break;
             
        case Release:
-            Sequence_State = next? Release : nextState;
+            if (next) {
+                switch (PINB) {
+                    case 0x00: // One/Init
+                        Sequence_State = Two;
+                        break;
+                    case 0x0C: // Two
+                        Sequence_State = Three;
+                        break;
+                    case 0x1E: // Three
+                        Sequence_State = Four;
+                        break;
+                    case 0x3F: // Four
+                        Sequence_State = Five;
+                        break;
+                    case 0x33: // Five
+                        Sequence_State = Six;
+                        break;
+                    case 0x21: // Six
+                        Sequence_State = One;
+                        break;
+                    default:
+                        Sequence_State = Start;
+                        break;
+                }
+            } else {
+                Sequence_State = Release;
+            }
             display = PINB;
             break;
         
@@ -89,4 +108,3 @@ int main(void)
         lightSequence();
     }
 }
-

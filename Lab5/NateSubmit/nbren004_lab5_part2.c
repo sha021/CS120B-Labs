@@ -10,14 +10,13 @@
 
 #include <avr/io.h>
 
-enum Counter_State { Start, Init, Wait, Increment_Press, Decrement_Press, Held } Counter_State;
+enum Counter_State { Start, Init, Wait, Reset, Increment_Press, Decrement_Press, Release } Counter_State;
 
 void counter() {
     
     unsigned char increment = ~PINA & 0x01, decrement = ~PINA & 0X02, display = PINB & 0x0F;
     
     switch(Counter_State) {
-        
         case Start:
             Counter_State = Init;
         break;
@@ -30,27 +29,30 @@ void counter() {
         case Wait:
             if (increment && !decrement) Counter_State = Increment_Press;
             else if (!increment && decrement) Counter_State = Decrement_Press;
-            else if (increment && decrement) Counter_State = Held;
-            else Counter_State = Wait;
+            else if (increment && decrement) Counter_State = Reset;
+            break;
+        
+        case Reset:
+            display = 0x00;
+            if (increment && !decrement) Counter_State = Increment_Press;
+            else if (!increment && decrement) Counter_State = Decrement_Press;
+            else Counter_State = Reset;
             break;
         
         case Increment_Press:
             if (display < 9) display++;
-            Counter_State = Held;
+            Counter_State = Release;
             break;
         
         case Decrement_Press:
             if (display > 0) display--;
-            Counter_State = Held;
+            Counter_State = Release;
             break;
         
-        case Held:
+        case Release:
             if (!(increment || decrement)) Counter_State = Wait;
-            else {
-                // If both pressed, reset to counter to 0 
-                if (increment && decrement) display = 0x00;
-                Counter_State = Held;
-            }                
+            else if (increment && decrement) Counter_State = Reset;
+            else Counter_State = Release;
             break;
         
         default:
