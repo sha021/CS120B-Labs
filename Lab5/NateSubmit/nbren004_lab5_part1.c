@@ -40,12 +40,14 @@ int main(void)
             
             case 0x01:
             case 0x02:
-                graphFuel = SetBit(graphFuel, 5, 1);
+                graphFuel = SetBit(graphFuel, 5, 1) + SetBit(graphFuel, 6, 1);
             break;
             
             case 0x03:
             case 0x04:
-                graphFuel = SetBit(graphFuel, 4, 1) + SetBit(graphFuel, 5, 1);
+                graphFuel = SetBit(graphFuel, 4, 1) 
+                          + SetBit(graphFuel, 5, 1)
+                          + SetBit(graphFuel, 6, 1);
             break;
             
             case 0x05:
