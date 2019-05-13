@@ -11,7 +11,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define TASKS_SIZE 4
+#define TASKS_SIZE 5
 
 
 typedef struct Task_struct {
@@ -22,6 +22,7 @@ typedef struct Task_struct {
 } Task;
 
 unsigned char displayTL, displayBL, soundSwitch, speaker;
+unsigned long oscillationFrequency = 2;
 const unsigned long TASKS_PERIOD = 1;
 Task tasks[TASKS_SIZE];
 
@@ -242,8 +243,8 @@ int TickFct_combine(int state) {
     return state;
 }
 
-enum OscilateSoundStates { Sound_Start, S_Off, S_On };
-int TickFct_oscilateSound(int state) {
+enum OscillateSoundStates { Sound_Start, S_Off, S_On };
+int TickFct_oscillateSound(int state) {
     soundSwitch = ~PINA & 0x04;
     // Transitions
     switch (state) {
@@ -275,14 +276,55 @@ int TickFct_oscilateSound(int state) {
     }
     return state;
 }    
-    
+
+enum AdjustOscillation { AO_Start, Stay, Increment, Decrement };
+int TickFct_adjustOscillation(int state) {
+    unsigned char up, down;
+    up = ~PINA & 0x01;
+    down = ~PINA & 0x02;
+    // Transitions
+    switch (state) {
+        case AO_Start:
+            state = Stay;
+            break;
+        case Stay:
+        case Increment:
+        case Decrement:
+            if (up) state = Increment;
+            else if (down) state = Decrement;
+            else state = Stay;
+            break;
+        default:
+            state = AO_Start;
+            break;
+    }
+    // Actions
+    switch (state) {
+        case Increment:
+            if (oscillationFrequency < 1000) {
+                oscillationFrequency++;
+                PORTC = 0x01;
+            }               
+            break;
+        case Decrement:
+            if (oscillationFrequency > 2) {
+                oscillationFrequency--;
+                PORTC = 0x02;
+            }                
+            break;
+        default:
+            break;
+    }
+    tasks[3].period = oscillationFrequency;
+    return state;
+}
 
 
 /* ----------------------- MAIN ----------------------- */
 
 int main() {
     
-    DDRA = 0x00; PORTA = 0x04;
+    DDRA = 0x00; PORTA = 0x07;
     DDRB = 0x4F; PORTB = 0x00;
     
     unsigned char i = 0;
@@ -296,17 +338,22 @@ int main() {
     tasks[i].elapsedTime = tasks[i].period;
     tasks[i].TickFct = &TickFct_blinkLed;
     i++;
-    tasks[i].state = Sound_Start;
-    tasks[i].period = 2;
+    tasks[i].state = AO_Start;
+    tasks[i].period = 200;
     tasks[i].elapsedTime = tasks[i].period;
-    tasks[i].TickFct = &TickFct_oscilateSound;
+    tasks[i].TickFct = &TickFct_adjustOscillation;
+    i++;
+    tasks[i].state = Sound_Start;
+    tasks[i].period = oscillationFrequency;
+    tasks[i].elapsedTime = tasks[i].period;
+    tasks[i].TickFct = &TickFct_oscillateSound;
     i++;
     tasks[i].state = C_Start;
     tasks[i].period = 1;
     tasks[i].elapsedTime = tasks[i].period;
     tasks[i].TickFct = &TickFct_combine;
     
-    TimerSet(1);
+    TimerSet(TASKS_PERIOD);
     TimerOn();
     PWM_on();
         
