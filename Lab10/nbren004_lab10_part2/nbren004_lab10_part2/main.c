@@ -1,15 +1,16 @@
 /* Nathan Brennan - nbren004@ucr.edu
  * Seung Eun Ha - sha021@ucr.edu
  * Lab Section: 27
- * Assignment: Lab 10 Part 1
- * Description: Concurrent Light Display
+ * Assignment: Lab 10 Part 2
+ * Description: Concurrent Light Display (with sped up tri-light)
  *
- * Created: 5/12/2019 5:57:59 PM
+ * Created: 5/12/2019 6:40:48 PM
  * Author : Nathan Brennan & Seung Eun Ha
  */ 
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+
 
 #define TASKS_SIZE 3
 
@@ -220,7 +221,7 @@ int main() {
     tasks[i].elapsedTime = tasks[i].period;
     tasks[i].TickFct = &TickFct_combineLeds;
     
-    TimerSet(1);
+    TimerSet(TASKS_PERIOD);
     TimerOn();
     
     while (1) { /*Sleep();*/ }

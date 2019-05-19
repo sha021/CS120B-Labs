@@ -94,8 +94,8 @@ void TimerSet(unsigned long M) {
 
 /* ----------------------- STATE MACHINE ----------------------- */
 
-enum ButtonStates { B_Start, Stay, Increment, Decrement };
-int buttonPress(int state) {
+enum CounterStates { B_Start, Stay, Increment, Decrement };
+int counterTick(int state) {
     unsigned char up = ~PINA & 0x01, down = ~PINA & 0x02;
     // Transitions
     switch (state) {
@@ -131,11 +131,11 @@ int buttonPress(int state) {
             if (up && down) display = 0x00;                 // Reset
             else if (display < 9) {
                 if (count <= 300) {
-                    PORTD = 0x01;
                     if (!((count) % 100)) display++;        // Up Slow
+                    PORTD = 0x01;            
                 }                
                 else if (!((count - 300) % 40)) {
-                    display++;  // Up Fast
+                    display++;                              // Up Fast
                     PORTD = 0x02;
                 }                    
             }            
@@ -148,8 +148,8 @@ int buttonPress(int state) {
                     if (!((count) % 100)) display--;        // Down Slow
                     PORTD = 0x01;
                 }
-                else if (!((count - 300) % 40)){ 
-                    display--;  // Down Fast
+                else if (!((count - 300) % 40)) { 
+                    display--;                              // Down Fast
                     PORTD = 0x02;
                 }                    
             }            
@@ -169,13 +169,13 @@ int main(void) {
     
     DDRA = 0x07; PORTA = 0x03;
     DDRB = 0x0F; PORTB = 0x00;
-    DDRD = 0x03; PORTD = 0x00;
+    DDRD = 0x03; PORTD = 0x00;      // <---- Used for debugging
     
     unsigned char i = 0;
     tasks[i].state = B_Start;
     tasks[i].period = TASKS_PERIOD;
     tasks[i].elapsedTime = tasks[i].period;
-    tasks[i].TickFunc = &buttonPress;
+    tasks[i].TickFunc = &counterTick;
     
     TimerSet(TASKS_PERIOD);
     TimerOn();
