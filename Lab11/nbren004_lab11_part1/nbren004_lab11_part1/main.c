@@ -32,6 +32,8 @@ int keyPad(int state) {
         case Button :
             state = Button;
             break;
+        default :
+            break;
     }
     // Actions
     switch (state) {
@@ -61,7 +63,8 @@ int keyPad(int state) {
                 case '#': PORTB = 0x0F; break;
                 default: PORTB = 0x1B;  break; // Should never occur. Middle LED off.
             }
-        default : break;                            
+        default : 
+            break;                            
     }
     return state;
 }
@@ -73,7 +76,7 @@ int keyPad(int state) {
 int main(void)
 {
 	DDRB = 0xFF; PORTB = 0x00; 
-	DDRC = 0xF0; PORTC = 0x0F; 
+	DDRA = 0xF0; PORTA = 0x0F; 
     
     tasks[0].state = Start;
     tasks[0].period = 10;
@@ -83,5 +86,4 @@ int main(void)
     TimerSet(TASKS_PERIOD);
     TimerOn();
 	while(1) {}
-	
 }

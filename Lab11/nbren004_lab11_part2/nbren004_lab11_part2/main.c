@@ -13,7 +13,6 @@
 #include <string.h>
 #define TASKS_SIZE 1
 #define TASKS_PERIOD 1000
-// #include "../../../Includes/bit.h"
 #include "../../../Includes/scheduler.h"
 #include "../../../Includes/timer.h"
 #include "../../../Includes/io.h"
