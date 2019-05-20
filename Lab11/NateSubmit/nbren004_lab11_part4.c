@@ -1,10 +1,10 @@
  /* Nathan Brennan - nbren004@ucr.edu
  * Seung Eun Ha - sha021@ucr.edu
  * Lab Section: 27
- * Assignment: Lab 11 Part 3
- * Description: Display KeyPad inputs on LCD output
+ * Assignment: Lab 11 Part 4
+ * Description: Edit display on KeyPad through LCD output
  *
- * Created: 5/19/2019 3:49:51 PM
+ * Created: 5/19/2019 8:30:00 PM
  * Author : Nathan Brennan & Seung Eun Ha
  */ 
 
@@ -21,16 +21,21 @@
 #include "io.h"
 
 char* message;
+unsigned char position;
+
 
 /* ----------------------- STATE MACHINES ----------------------- */
 enum keyPadStates{KP_Start, Button};
 int keyPad_tick(int state) {
-    unsigned char x;
+    static char input;
+    unsigned char mutate;
     // Transitions
     switch (state) {
         case KP_Start :
             state = Button;
-            message = "";
+            message = "Type over me!                   ";
+            position = 0;
+            mutate = 0;
             break;
         case Button :
             state = Button;
@@ -41,38 +46,21 @@ int keyPad_tick(int state) {
     // Actions
     switch (state) {
         case Button :
-            x = GetKeypadKey();
-            switch (x) {
-                case '\0': break;
-                case '1': message = "1"; break;
-                case '2': message = "2"; break;
-
-                case '3': message = "3"; break;
-                case '4': message = "4"; break;
-                case '5': message = "5"; break;
-                case '6': message = "6"; break;
+            input = GetKeypadKey();
+            if (input) mutate = 1;
+            else mutate = 0;
             
-                case '7': message = "7"; break;
-                case '8': message = "8"; break;
-                case '9': message = "9"; break;
-                case 'A': message = "A"; break;
-            
-                case 'B': message = "B"; break;
-                case 'C': message = "C"; break;
-            
-                case 'D': message = "D"; break;
-                case '*': message = "*"; break;
-                case '0': message = "0"; break;
-                case '#': message = "#"; break;
-                default: message = "<Error>";  break; // Should never occur.
-            }
+            if (mutate) {
+                message[position] = input;
+                if (position >= 31) position = 0;
+                else position++;
+            }            
             break;
         default : 
             break;
     }
     return state;
 }
-
 
 enum LCD_States { LCD_Start, Display };
 int LCD_tick(int state) {
@@ -92,6 +80,8 @@ int LCD_tick(int state) {
     switch (state) {
         case Display:
             LCD_DisplayString(1, message);
+            LCD_Cursor(position + 1);
+
             break;
         default:
             break;
@@ -105,7 +95,6 @@ int main(void)
     DDRA = 0xF0; PORTA = 0x0F;  // Keypad input
     DDRC = 0xFF; PORTC = 0x00;  // LCD data lines
     DDRD = 0xFF; PORTD = 0x00;  // LCD control lines
-    
     
     unsigned char i = 0;
     tasks[i].state = KP_Start;
