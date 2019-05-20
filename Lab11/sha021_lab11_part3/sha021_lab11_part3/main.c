@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 #define TASKS_SIZE 2
-#define TASKS_PERIOD 100
+#define TASKS_PERIOD 200
 #include "bit.h"
 #include "scheduler.h"
 #include "timer.h"
@@ -63,7 +63,7 @@ int keyPad_tick(int state) {
                 case '*': message = "*"; break;
                 case '0': message = "0"; break;
                 case '#': message = "#"; break;
-             //   default: message = "<Error>";  break; // Should never occur. Middle LED off.
+                default: message = "<Error>";  break; // Should never occur. Middle LED off.
             }
             break;
         default : 
@@ -101,7 +101,6 @@ int LCD_tick(int state) {
 int main(void)
 {
     DDRA = 0xF0; PORTA = 0x0F;  // Keypad input
-    DDRB = 0xFF; PORTB = 0xFF;  // Testing output
     DDRC = 0xFF; PORTC = 0x00;  // LCD data lines
     DDRD = 0xFF; PORTD = 0x00;  // LCD control lines
     
